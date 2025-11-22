@@ -4,12 +4,456 @@
   <meta charset="UTF-8">
   <title>Formulário de Vendas - NAJOY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Mantém seu CSS original -->
+
   <style>
-    /* ... todo o CSS original que você já tinha ... */
+    :root {
+      --burgundy: #6b1115;
+      --burgundy-soft: #8c2a30;
+      --gold: #cda046;
+      --gold-light: #e7c57a;
+      --cream: #f6f0dc;
+      --text-main: #3b2320;
+      --border-soft: #dcc7a0;
+      --shadow-soft: 0 14px 40px rgba(0, 0, 0, 0.08);
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Georgia", "Times New Roman", serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(203, 149, 72, 0.25), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(107, 17, 21, 0.25), transparent 60%),
+        var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      color: var(--text-main);
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 900px;
+      background-color: #fdf9ee;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 32px 28px 28px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(205, 160, 70, 0.35);
+    }
+
+    .form-wrapper::before {
+      content: "JJ";
+      position: absolute;
+      font-size: 200px;
+      font-weight: 400;
+      color: rgba(205, 160, 70, 0.08);
+      right: -10px;
+      top: -60px;
+      letter-spacing: 0.05em;
+      pointer-events: none;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand-name {
+      font-size: 32px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--burgundy);
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .header-info {
+      text-align: right;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #7a5e4c;
+    }
+
+    .header-info a {
+      color: var(--burgundy-soft);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(107, 17, 21, 0.35);
+      padding-bottom: 1px;
+    }
+
+    .header-info a:hover {
+      opacity: 0.8;
+    }
+
+    h1 {
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--burgundy);
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--burgundy-soft);
+      margin-bottom: 6px;
+    }
+
+    .card {
+      background: rgba(255, 252, 244, 0.95);
+      border-radius: 16px;
+      padding: 18px 16px 14px;
+      border: 1px solid var(--border-soft);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px 16px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+    }
+
+    .field--full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #7b5a4d;
+    }
+
+    label .required {
+      color: var(--burgundy-soft);
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="time"],
+    input[type="number"],
+    select,
+    textarea {
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      padding: 9px 12px;
+      font-size: 13px;
+      background: #fdf8ed;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    textarea {
+      border-radius: 16px;
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #b79c86;
+      font-size: 12px;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--gold);
+      background: #fffaf0;
+      box-shadow: 0 0 0 1px rgba(205, 160, 70, 0.32);
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding-right: 28px;
+      background-image: linear-gradient(45deg, transparent 50%, var(--gold) 50%),
+                        linear-gradient(135deg, var(--gold) 50%, transparent 50%);
+      background-position: calc(100% - 14px) 55%, calc(100% - 9px) 55%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+
+    .field-helper {
+      font-size: 11px;
+      color: #a1806a;
+    }
+
+    .products-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .products-header p {
+      font-size: 11px;
+      color: #8e6d5e;
+    }
+
+    .product-item {
+      display: grid;
+      grid-template-columns: minmax(0, 150px) minmax(0, 1fr) 120px auto;
+      gap: 10px 12px;
+      align-items: end;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      background: rgba(246, 238, 220, 0.8);
+      border: 1px dashed rgba(205, 160, 70, 0.6);
+      position: relative;
+    }
+
+    .product-item:first-of-type {
+      margin-top: 4px;
+    }
+
+    .pill-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #7c5d51;
+      margin-bottom: 4px;
+    }
+
+    .btn-icon {
+      border-radius: 999px;
+      padding: 8px 14px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      background: var(--burgundy);
+      color: #fdf5e7;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 25px rgba(107, 17, 21, 0.2);
+      white-space: nowrap;
+    }
+
+    .btn-icon span.symbol {
+      font-size: 17px;
+      line-height: 1;
+      margin-top: -1px;
+    }
+
+    .btn-icon--ghost {
+      background: transparent;
+      color: #8b6254;
+      border: 1px solid rgba(139, 98, 84, 0.3);
+      box-shadow: none;
+      padding: 7px 10px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+    }
+
+    .btn-icon--ghost:hover {
+      background: rgba(139, 98, 84, 0.06);
+    }
+
+    .btn-icon:hover {
+      filter: brightness(1.02);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(107, 17, 21, 0.26);
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .products-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .pill-note {
+      font-size: 11px;
+      background: rgba(255, 253, 246, 0.6);
+      border-radius: 999px;
+      padding: 6px 12px;
+      border: 1px solid rgba(220, 199, 160, 0.7);
+      color: #8b6c5e;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn-main,
+    .btn-secondary {
+      border-radius: 999px;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, var(--burgundy) 0%, #3f0507 100%);
+      color: #fdf7ea;
+      box-shadow: 0 18px 40px rgba(79, 5, 10, 0.4);
+    }
+
+    .btn-main:hover {
+      filter: brightness(1.03);
+      transform: translateY(-1px);
+      box-shadow: 0 22px 50px rgba(79, 5, 10, 0.55);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(139, 98, 84, 0.45);
+      color: #8b6254;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(139, 98, 84, 0.07);
+    }
+
+    .required-note {
+      font-size: 11px;
+      color: #977560;
+      margin-top: 6px;
+      text-align: right;
+    }
+
+    .required-note .asterisk {
+      color: var(--burgundy-soft);
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-size: 12px;
+      text-align: right;
+      min-height: 16px;
+    }
+
+    .feedback.success {
+      color: #256f3b;
+    }
+
+    .feedback.error {
+      color: #a12626;
+    }
+
+    @media (max-width: 900px) {
+      .product-item {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: auto;
+      }
+      .product-item .btn-row {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .form-wrapper {
+        padding: 24px 18px 20px;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-info {
+        text-align: left;
+      }
+
+      .grid-3,
+      .grid-2,
+      .product-item,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-item {
+        padding-bottom: 10px;
+      }
+
+      .products-actions,
+      .actions {
+        justify-content: stretch;
+      }
+
+      .btn-main,
+      .btn-secondary,
+      .btn-icon {
+        width: 100%;
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 <body>
+
   <div class="form-wrapper">
     <header>
       <div class="brand-block">
@@ -18,26 +462,67 @@
       </div>
       <div class="header-info">
         <div>Formulário interno de registro de vendas</div>
-        <div><a href="https://www.lojanajoy.com.br" target="_blank" rel="noopener noreferrer">lojanajoy.com.br</a></div>
+        <div><a href="https://www.lojanajoy.com.br" target="_blank" rel="noopener noreferrer">
+          lojanajoy.com.br
+        </a></div>
       </div>
     </header>
+
     <h1>Registro de venda</h1>
+
     <form id="form-venda">
       <!-- DADOS GERAIS -->
-      <!-- Mantém a primeira seção igual -->
-      
+      <section class="card">
+        <div class="section-title">Dados do atendimento</div>
+        <div class="grid-3">
+          <div class="field">
+            <label for="atendente">Atendente<span class="required">*</span></label>
+            <input type="text" id="atendente" name="atendente"
+                   placeholder="Nome de quem realizou o atendimento" required>
+          </div>
+
+          <div class="field">
+            <label for="cliente">Cliente<span class="required">*</span></label>
+            <input type="text" id="cliente" name="cliente"
+                   placeholder="Nome completo do cliente" required>
+          </div>
+
+          <div class="field">
+            <label for="telefone">Telefone</label>
+            <input type="tel" id="telefone" name="telefone"
+                   placeholder="(  )  _____-____">
+            <span class="field-helper">Opcional</span>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:14px;">
+          <div class="field">
+            <label for="data">Data<span class="required">*</span></label>
+            <input type="date" id="data" name="data" required>
+          </div>
+
+          <div class="field">
+            <label for="hora">Hora<span class="required">*</span></label>
+            <input type="time" id="hora" name="hora" required>
+          </div>
+        </div>
+      </section>
+
       <!-- PRODUTOS -->
       <section class="card">
         <div class="products-header">
           <div class="section-title">Produtos</div>
           <p>Adicione todos os itens da venda. Use o botão “+ produto” para incluir novos.</p>
         </div>
+
         <div id="products-list"></div>
+
         <div class="field" style="margin-top:10px; max-width:230px; margin-left:auto;">
           <label for="valor-total">Valor total da venda</label>
           <input type="text" id="valor-total" name="valor_total" readonly placeholder="R$ 0,00">
           <span class="field-helper">Calculado automaticamente pelos produtos.</span>
         </div>
+
         <div class="products-actions">
           <button type="button" class="btn-icon" id="btn-add-product">
             <span class="symbol">+ </span> produto
@@ -45,28 +530,83 @@
         </div>
       </section>
 
-      <!-- ENTREGA, PAGAMENTO, ORIGEM, CANAL & OBSERVAÇÕES -->
+      <!-- ENTREGA, PAGAMENTO, ORIGEM E OBSERVAÇÕES -->
       <section class="card">
         <div class="section-title">Entrega &amp; detalhes</div>
+
         <div class="footer-grid">
-          <!-- campos já existentes -->
+          <div class="field">
+            <label for="tipo-entrega">Tipo de entrega<span class="required">*</span></label>
+            <select id="tipo-entrega" name="tipo_entrega" required>
+              <option value="">Selecione...</option>
+              <option value="aplicativos">Aplicativos</option>
+              <option value="entregador">Entregador</option>
+              <option value="retirada">Retirada</option>
+              <option value="outros">Outros</option>
+            </select>
+            <span class="field-helper">
+              Se necessário, detalhe em observações ou em “Outros”.
+            </span>
+          </div>
+
+          <div class="field">
+            <label for="observacoes">Observações</label>
+            <textarea id="observacoes" name="observacoes"
+                      placeholder="Ex.: tamanho ajustado, presente com embalagem especial, combinações de entrega, observações do cliente etc. (opcional)"></textarea>
+          </div>
         </div>
 
-        <!-- Campo Canal da venda -->
-        <div class="field" style="margin-top:14px;">
-          <label for="canal-venda">Canal da venda<span class="required">*</span></label>
-          <select id="canal-venda" name="canal_venda" required>
-            <option value="">Selecione...</option>
-            <option value="site">Site</option>
-            <option value="whatsapp">WhatsApp</option>
-            <option value="outros">Outros</option>
-          </select>
-        </div>
-        <div class="field" id="canal-outros-wrapper" style="margin-top:10px; display:none;">
-          <label for="canal-outros">Informe o canal (Outros)</label>
-          <input type="text" id="canal-outros" name="canal_outros" placeholder="Digite o canal">
+        <div class="field" id="entrega-outros-wrapper" style="margin-top:10px; display:none;">
+          <label for="entrega-outros">Informe o tipo de entrega (Outros)</label>
+          <input type="text" id="entrega-outros" name="tipo_entrega_outros"
+                 placeholder="Descreva a forma de entrega">
         </div>
 
+        <div class="grid-2" style="margin-top:14px;">
+          <div class="field">
+            <label for="forma-pagamento">Forma de pagamento<span class="required">*</span></label>
+            <select id="forma-pagamento" name="forma_pagamento" required>
+              <option value="">Selecione...</option>
+              <option value="pix">PIX</option>
+              <option value="dinheiro">Dinheiro</option>
+              <option value="debito">Débito</option>
+              <option value="credito">Crédito</option>
+              <option value="outros">Outros</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="origem-cliente">Origem do cliente<span class="required">*</span></label>
+            <select id="origem-cliente" name="origem_cliente" required>
+              <option value="">Selecione...</option>
+              <option value="cliente-fixo">Cliente fixo</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="instagram">Instagram</option>
+              <option value="facebook">Facebook</option>
+              <option value="marketplace">Marketplace</option>
+              <option value="olx">OLX</option>
+              <option value="grupos-vendas">Grupos de vendas</option>
+              <option value="anuncios">Anúncios</option>
+              <option value="outros">Outros</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field" id="pagamento-outros-wrapper" style="margin-top:10px; display:none;">
+          <label for="pagamento-outros">Informe a forma de pagamento (Outros)</label>
+          <input type="text" id="pagamento-outros" name="forma_pagamento_outros"
+                 placeholder="Descreva a forma de pagamento">
+        </div>
+
+        <div class="field" id="origem-outros-wrapper" style="margin-top:10px; display:none;">
+          <label for="origem-outros">Informe o local (Outros)</label>
+          <input type="text" id="origem-outros" name="origem_outros"
+                 placeholder="Ex.: indicação, banner da loja, outro aplicativo...">
+        </div>
+
+        <div class="pill-note" style="margin-top:14px;">
+          Este formulário é para controle interno da NAJOY e não substitui a emissão de nota ou comprovante fiscal.
+        </div>
       </section>
 
       <!-- AÇÕES -->
@@ -74,13 +614,18 @@
         <button type="reset" class="btn-secondary">limpar</button>
         <button type="submit" class="btn-main">registrar venda</button>
       </div>
-      <p class="required-note">Campos marcados com <span class="asterisk">*</span> são obrigatórios.</p>
+
+      <p class="required-note">
+        Campos marcados com <span class="asterisk">*</span> são obrigatórios.
+      </p>
       <div id="feedback" class="feedback"></div>
     </form>
   </div>
 
   <script>
-    const WEB_APP_URL = "SUA_URL_DO_APP_SCRIPT_AQUI";
+    // ======= LINK DO SEU WEB APP (APPS SCRIPT) =======
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz9ugvHr3y5Tlkl12sNsTsgofymw1cKcMg6Od4ENsxBLNlNqnZoQYhIlDoynW9u534f/exec";
+
     const productsList = document.getElementById('products-list');
     const addProductBtn = document.getElementById('btn-add-product');
     const totalInput = document.getElementById('valor-total');
@@ -89,31 +634,21 @@
     const entregaSelect = document.getElementById('tipo-entrega');
     const entregaOutrosWrapper = document.getElementById('entrega-outros-wrapper');
     const entregaOutrosInput = document.getElementById('entrega-outros');
+
     const formaPagamentoSelect = document.getElementById('forma-pagamento');
     const pagamentoOutrosWrapper = document.getElementById('pagamento-outros-wrapper');
     const pagamentoOutrosInput = document.getElementById('pagamento-outros');
+
     const origemSelect = document.getElementById('origem-cliente');
     const origemOutrosWrapper = document.getElementById('origem-outros-wrapper');
     const origemOutrosInput = document.getElementById('origem-outros');
 
-    // Novo: canal da venda
-    const canalVendaSelect = document.getElementById('canal-venda');
-    const canalOutrosWrapper = document.getElementById('canal-outros-wrapper');
-    const canalOutrosInput = document.getElementById('canal-outros');
-
-    canalVendaSelect.addEventListener('change', () => {
-      if (canalVendaSelect.value === 'outros') {
-        canalOutrosWrapper.style.display = 'block';
-      } else {
-        canalOutrosWrapper.style.display = 'none';
-        canalOutrosInput.value = '';
-      }
-    });
-
     function createProductItem() {
       const index = productsList.children.length;
+
       const wrapper = document.createElement('div');
       wrapper.className = 'product-item';
+
       wrapper.innerHTML = `
         <div class="field">
           <span class="pill-label">Categoria<span class="required">*</span></span>
@@ -126,46 +661,57 @@
             <option value="outros">Outros</option>
           </select>
         </div>
-        <div class="field">
-          <span class="pill-label">Quantidade<span class="required">*</span></span>
-          <input type="number" min="1" data-role="quantidade" name="produtos[${index}][quantidade]" placeholder="1" required>
-        </div>
+
         <div class="field">
           <span class="pill-label">Nome do produto<span class="required">*</span></span>
-          <input type="text" data-role="nome" name="produtos[${index}][nome]" placeholder="Ex.: Conjunto renda" required>
+          <input type="text"
+                 data-role="nome"
+                 name="produtos[${index}][nome]"
+                 placeholder="Ex.: Conjunto renda vinho, calcinha fio dental, óleo corporal…"
+                 required>
         </div>
-        <div class="field">
-          <span class="pill-label">Tamanho</span>
-          <input type="text" data-role="tamanho" name="produtos[${index}][tamanho]" placeholder="Ex.: P, M, G, GG">
-        </div>
-        <div class="field">
-          <span class="pill-label">Cor</span>
-          <input type="text" data-role="cor" name="produtos[${index}][cor]" placeholder="Ex.: vermelho, preto">
-        </div>
+
         <div class="field">
           <span class="pill-label">Valor (R$)<span class="required">*</span></span>
-          <input type="number" step="0.01" min="0" inputmode="decimal" data-role="valor" name="produtos[${index}][valor]" placeholder="0,00" required>
+          <input type="number"
+                 step="0.01"
+                 min="0"
+                 inputmode="decimal"
+                 data-role="valor"
+                 name="produtos[${index}][valor]"
+                 placeholder="0,00"
+                 required>
         </div>
+
         <div class="btn-row">
-          <button type="button" class="btn-icon btn-icon--ghost btn-remove-product">remover</button>
+          <button type="button" class="btn-icon btn-icon--ghost btn-remove-product">
+            remover
+          </button>
         </div>
+
         <div class="field field--full product-cat-outros" style="display:none; margin-top:6px;">
           <span class="pill-label">Informe a categoria (Outros)</span>
-          <input type="text" data-role="categoria_outros" name="produtos[${index}][categoria_outros]" placeholder="Digite a categoria do produto">
+          <input type="text"
+                 data-role="categoria_outros"
+                 name="produtos[${index}][categoria_outros]"
+                 placeholder="Digite a categoria do produto">
         </div>
       `;
+
       const removeBtn = wrapper.querySelector('.btn-remove-product');
       removeBtn.addEventListener('click', () => {
         productsList.removeChild(wrapper);
         renumberProducts();
         updateTotal();
       });
+
       const valorInput = wrapper.querySelector("input[data-role='valor']");
       valorInput.addEventListener('input', updateTotal);
-      // categoria outros
+
       const categoriaSelect = wrapper.querySelector("select[data-role='categoria']");
       const catOutrosWrapper = wrapper.querySelector('.product-cat-outros');
       const catOutrosInput = wrapper.querySelector("input[data-role='categoria_outros']");
+
       categoriaSelect.addEventListener('change', () => {
         if (categoriaSelect.value === 'outros') {
           catOutrosWrapper.style.display = 'block';
@@ -174,33 +720,49 @@
           catOutrosInput.value = '';
         }
       });
+
       return wrapper;
     }
 
     function renumberProducts() {
       Array.from(productsList.children).forEach((item, newIndex) => {
-        item.querySelectorAll('[name]').forEach(el => {
-          const role = el.getAttribute('data-role');
-          if (role) {
-            el.name = `produtos[${newIndex}][${role}]`;
-          }
-        });
+        const categoriaEl = item.querySelector("[data-role='categoria']");
+        const nomeEl = item.querySelector("[data-role='nome']");
+        const valorEl = item.querySelector("[data-role='valor']");
+        const catOutrosEl = item.querySelector("[data-role='categoria_outros']");
+
+        if (categoriaEl) {
+          categoriaEl.name = `produtos[${newIndex}][categoria]`;
+        }
+        if (nomeEl) {
+          nomeEl.name = `produtos[${newIndex}][nome]`;
+        }
+        if (valorEl) {
+          valorEl.name = `produtos[${newIndex}][valor]`;
+        }
+        if (catOutrosEl) {
+          catOutrosEl.name = `produtos[${newIndex}][categoria_outros]`;
+        }
       });
     }
 
     function updateTotal() {
       let total = 0;
+
       Array.from(productsList.children).forEach(item => {
         const valInput = item.querySelector("input[data-role='valor']");
         if (!valInput) return;
         let v = valInput.value.trim();
         if (!v) return;
-        v = v.replace(',', '.'); // corrige centavos
+
+        // aceita "10,50" ou "10.50"
+        v = v.replace(/\./g, '').replace(',', '.');
         const num = parseFloat(v);
         if (!isNaN(num)) {
           total += num;
         }
       });
+
       if (total > 0) {
         totalInput.value = "R$ " + total.toFixed(2).replace('.', ',');
       } else {
@@ -209,59 +771,106 @@
     }
 
     addProductBtn.addEventListener('click', () => {
-      productsList.appendChild(createProductItem());
+      const item = createProductItem();
+      productsList.appendChild(item);
     });
+
     if (productsList.children.length === 0) {
       productsList.appendChild(createProductItem());
     }
 
-    // selects outros para entrega/pagamento/origem
+    // selects "Outros" (entrega, pagamento, origem)
     entregaSelect.addEventListener('change', () => {
-      entregaOutrosWrapper.style.display = entregaSelect.value === 'outros' ? 'block' : 'none';
-      if (entregaSelect.value !== 'outros') entregaOutrosInput.value = '';
-    });
-    formaPagamentoSelect.addEventListener('change', () => {
-      pagamentoOutrosWrapper.style.display = formaPagamentoSelect.value === 'outros' ? 'block' : 'none';
-      if (formaPagamentoSelect.value !== 'outros') pagamentoOutrosInput.value = '';
-    });
-    origemSelect.addEventListener('change', () => {
-      origemOutrosWrapper.style.display = origemSelect.value === 'outros' ? 'block' : 'none';
-      if (origemSelect.value !== 'outros') origemOutrosInput.value = '';
+      if (entregaSelect.value === 'outros') {
+        entregaOutrosWrapper.style.display = 'block';
+      } else {
+        entregaOutrosWrapper.style.display = 'none';
+        entregaOutrosInput.value = '';
+      }
     });
 
-    // envio para planilha
+    formaPagamentoSelect.addEventListener('change', () => {
+      if (formaPagamentoSelect.value === 'outros') {
+        pagamentoOutrosWrapper.style.display = 'block';
+      } else {
+        pagamentoOutrosWrapper.style.display = 'none';
+        pagamentoOutrosInput.value = '';
+      }
+    });
+
+    origemSelect.addEventListener('change', () => {
+      if (origemSelect.value === 'outros') {
+        origemOutrosWrapper.style.display = 'block';
+      } else {
+        origemOutrosWrapper.style.display = 'none';
+        origemOutrosInput.value = '';
+      }
+    });
+
+    // ---------- ENVIO PARA PLANILHA ----------
     const form = document.getElementById('form-venda');
     const feedbackEl = document.getElementById('feedback');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
       feedbackEl.textContent = "";
       feedbackEl.className = "feedback";
-      const formData = new FormData(form);
-      const plainData = Object.fromEntries(formData.entries());
 
-      // produtos
+      const formData = new FormData(form);
+      const plainData = {};
+
+      plainData.atendente          = formData.get("atendente");
+      plainData.cliente            = formData.get("cliente");
+      plainData.telefone           = formData.get("telefone");
+      plainData.data               = formData.get("data");
+      plainData.hora               = formData.get("hora");
+      plainData.tipoEntrega        = formData.get("tipo_entrega");
+      plainData.tipoEntregaOutros  = formData.get("tipo_entrega_outros");
+      plainData.observacoes        = formData.get("observacoes");
+      plainData.formaPagamento     = formData.get("forma_pagamento");
+      plainData.formaPagamentoOutros = formData.get("forma_pagamento_outros");
+      plainData.origemCliente      = formData.get("origem_cliente");
+      plainData.origemOutros       = formData.get("origem_outros");
+
+      // Produtos
       const produtos = [];
       Array.from(productsList.children).forEach((item) => {
-        const p = {};
-        item.querySelectorAll('[data-role]').forEach(el => {
-          p[el.getAttribute('data-role')] = el.value;
-        });
-        produtos.push(p);
+        const categoriaEl = item.querySelector("[data-role='categoria']");
+        const nomeEl      = item.querySelector("[data-role='nome']");
+        const valorEl     = item.querySelector("[data-role='valor']");
+        const catOutrosEl = item.querySelector("[data-role='categoria_outros']");
+
+        const categoria       = categoriaEl ? categoriaEl.value : "";
+        const nome            = nomeEl ? nomeEl.value : "";
+        const valor           = valorEl ? valorEl.value : "";
+        const categoriaOutros = catOutrosEl ? catOutrosEl.value : "";
+
+        if (categoria || nome || valor || categoriaOutros) {
+          produtos.push({ categoria, categoriaOutros, nome, valor });
+        }
       });
       plainData.produtos = produtos;
 
-      // total
+      // Total (texto)
       plainData.total = totalInput.value || "";
+
+      if (!WEB_APP_URL) {
+        alert("O link do Web App (WEB_APP_URL) não está configurado.");
+        return;
+      }
 
       try {
         feedbackEl.textContent = "Enviando registro para a planilha...";
         await fetch(WEB_APP_URL, {
           method: "POST",
           mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify(plainData)
         });
+
         feedbackEl.textContent = "Venda registrada com sucesso!";
         feedbackEl.classList.add("success");
         form.reset();
@@ -271,7 +880,6 @@
         entregaOutrosWrapper.style.display = 'none';
         pagamentoOutrosWrapper.style.display = 'none';
         origemOutrosWrapper.style.display = 'none';
-        canalOutrosWrapper.style.display = 'none';
       } catch (error) {
         console.error(error);
         feedbackEl.textContent = "Ocorreu um erro ao enviar para a planilha.";
