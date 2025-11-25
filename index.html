@@ -502,8 +502,9 @@
           </div>
 
           <div class="field">
-            <label for="hora">Hora<span class="required">*</span></label>
-            <input type="time" id="hora" name="hora" required>
+            <label for="hora">Hora</label>
+            <input type="time" id="hora" name="hora">
+            <span class="field-helper">Opcional</span>
           </div>
         </div>
       </section>
@@ -512,7 +513,7 @@
       <section class="card">
         <div class="products-header">
           <div class="section-title">Produtos</div>
-          <p>Adicione todos os itens da venda. Use o botão “+ produto” para incluir novos.</p>
+          <p>Adicione todos os itens da venda. Use o botão "+ produto" para incluir novos.</p>
         </div>
 
         <div id="products-list"></div>
@@ -545,7 +546,7 @@
               <option value="outros">Outros</option>
             </select>
             <span class="field-helper">
-              Se necessário, detalhe em observações ou em “Outros”.
+              Se necessário, detalhe em observações ou em "Outros".
             </span>
           </div>
 
@@ -848,44 +849,3 @@
 
         if (categoria || nome || valor || categoriaOutros) {
           produtos.push({ categoria, categoriaOutros, nome, valor });
-        }
-      });
-      plainData.produtos = produtos;
-
-      // Total (texto)
-      plainData.total = totalInput.value || "";
-
-      if (!WEB_APP_URL) {
-        alert("O link do Web App (WEB_APP_URL) não está configurado.");
-        return;
-      }
-
-      try {
-        feedbackEl.textContent = "Enviando registro para a planilha...";
-        await fetch(WEB_APP_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(plainData)
-        });
-
-        feedbackEl.textContent = "Venda registrada com sucesso!";
-        feedbackEl.classList.add("success");
-        form.reset();
-        productsList.innerHTML = "";
-        productsList.appendChild(createProductItem());
-        updateTotal();
-        entregaOutrosWrapper.style.display = 'none';
-        pagamentoOutrosWrapper.style.display = 'none';
-        origemOutrosWrapper.style.display = 'none';
-      } catch (error) {
-        console.error(error);
-        feedbackEl.textContent = "Ocorreu um erro ao enviar para a planilha.";
-        feedbackEl.classList.add("error");
-      }
-    });
-  </script>
-</body>
-</html>
