@@ -756,7 +756,7 @@
         if (!v) return;
 
         // aceita "10,50" ou "10.50"
-        v = v.replace(/\./g, '').replace(',', '.');
+       v = v.replace(',', '.');
         const num = parseFloat(v);
         if (!isNaN(num)) {
           total += num;
@@ -889,5 +889,6 @@
   </script>
 </body>
 </html>
+
 
 
